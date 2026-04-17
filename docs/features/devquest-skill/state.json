@@ -2,12 +2,12 @@
   "feature": "devquest-skill",
   "branch": "feature/devquest-skill",
   "baseBranch": "main",
-  "phase": "spec",
+  "phase": "implement",
   "created": "2026-04-17",
   "artifacts": {
-    "discovery": { "file": "discovery.md", "committed": false },
-    "spec": null,
-    "verified": false,
+    "discovery": { "file": "discovery.md", "committed": true },
+    "spec": { "file": "spec.md", "committed": false },
+    "verified": true,
     "implemented": false,
     "tested": false
   }
