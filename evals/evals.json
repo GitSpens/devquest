@@ -1,0 +1,23 @@
+{
+  "skill_name": "devquest",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to enable devquest for my project with a fantasy theme",
+      "expected_output": "Prompts for environment (CLI/Desktop), theme (Fantasy selected), display mode (Markdown/HTML). Creates .devquest/state.json with level 1, 0 XP, 0 gold. Shows fantasy-themed welcome message.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Show me my devquest character sheet",
+      "expected_output": "Reads .devquest/state.json, displays full character sheet with level, XP bar using = and - characters, gold, achievements, weekly stats, attributes, and active buffs in the configured display mode.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I want to buy a Test XP Boost from the devquest shop",
+      "expected_output": "Reads economy.md, shows shop catalog with prices and current gold. Processes purchase if enough gold: deducts 30 gold, adds buff with 10 actions remaining. Shows confirmation.",
+      "files": []
+    }
+  ]
+}
