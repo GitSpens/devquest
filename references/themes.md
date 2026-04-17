@@ -7,8 +7,8 @@ Read this file when you need theme-specific names, icons, or visual styles.
 ## Theme: Fantasy
 
 **Emoji set:** ⚔️ 🧙 🐉 🏰 ✨
-**Currency icon:** 💰 (Gold)
-**XP icon:** ⭐ (XP)
+**Currency icon:** 💰
+**XP icon:** ✨
 
 **Header style:** Bold medieval-fantasy tone with dramatic flair. Use ornate language and epic descriptors.
 
@@ -52,8 +52,8 @@ Read this file when you need theme-specific names, icons, or visual styles.
 ## Theme: Sci-Fi
 
 **Emoji set:** 🚀 🛸 🌌 🤖 ⚡
-**Currency icon:** 🔋 (Credits)
-**XP icon:** 💠 (XP)
+**Currency icon:** 💰
+**XP icon:** ⚡
 
 **Header style:** Clean, technical, mission-briefing tone. Use starship/fleet terminology and precise language.
 
@@ -97,8 +97,8 @@ Read this file when you need theme-specific names, icons, or visual styles.
 ## Theme: Retro
 
 **Emoji set:** 🎮 👾 🕹️ 🏆 💾
-**Currency icon:** 🪙 (Coins)
-**XP icon:** ⭐ (XP)
+**Currency icon:** 💰
+**XP icon:** 🔥
 
 **Header style:** Playful 8-bit/arcade tone. Use gaming slang, high-score energy, and nostalgic references.
 
@@ -142,8 +142,8 @@ Read this file when you need theme-specific names, icons, or visual styles.
 ## Theme: Minimalist
 
 **Emoji set:** (none — text only)
-**Currency icon:** pts (points)
-**XP icon:** xp
+**Currency icon:** G
+**XP icon:** XP
 
 **Header style:** Clean, unadorned plain text. No decorative punctuation, no emoji. Concise and direct.
 
