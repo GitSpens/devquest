@@ -1,0 +1,59 @@
+{
+  "projectType": "claude-skill",
+  "language": "markdown",
+  "framework": "Claude Code Skills Framework",
+
+  "subsystems": [
+    {"name": "Skill Core", "description": "SKILL.md frontmatter, description, and main instruction logic"},
+    {"name": "State Management", "description": "Persistent JSON state for XP, gold, levels, settings, achievements"},
+    {"name": "Rendering - Markdown", "description": "Terminal output with emoji, ASCII art, tables, progress bars"},
+    {"name": "Rendering - HTML", "description": "Browser-based dashboard with CSS themes and interactivity"},
+    {"name": "Themes", "description": "Fantasy, Sci-Fi, Retro, Minimalist visual and naming variations"},
+    {"name": "Commands", "description": "Slash commands: enable, disable, character, shop, quests, theme, settings"},
+    {"name": "Passive Tracking", "description": "Detection and reward logic for code, tests, features, bugs, docs"},
+    {"name": "Progression System", "description": "XP curves, leveling, achievements, attributes, weekly stats"},
+    {"name": "Shop & Economy", "description": "Gold spending, code generation rewards, pricing"}
+  ],
+
+  "filePatterns": {
+    "sourceGlob": "**/*.{md,json,html,css,js,py}",
+    "testGlob": "evals/**/*.json",
+    "existingCapabilities": null
+  },
+
+  "conventions": {
+    "maxFileLines": 500,
+    "maxFunctionLines": null,
+    "namingStyle": "kebab-case",
+    "fileOrganization": "SKILL.md at root, scripts/ for executable code, references/ for docs, assets/ for templates and HTML"
+  },
+
+  "testing": {
+    "framework": "skill-creator evals",
+    "testFilePattern": "evals/evals.json",
+    "runCommand": null,
+    "testMacro": null
+  },
+
+  "build": {
+    "command": null,
+    "verifyCommand": null
+  },
+
+  "git": {
+    "baseBranch": "main",
+    "branchPrefix": "feature/",
+    "commitPrefixes": ["feat:", "fix:", "test:", "docs:", "refactor:"]
+  },
+
+  "featureDocs": {
+    "directory": "docs/features",
+    "referencesDirectory": "docs/feature-references"
+  },
+
+  "referenceGeneration": {
+    "capabilityScanGlobs": [],
+    "domainDocGlobs": ["devquest_spec.txt"],
+    "gotchasSources": []
+  }
+}

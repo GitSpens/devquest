@@ -1,0 +1,113 @@
+# Gamified Feature Development Skill Plan
+# Standalone, Passive, CLI-Based
+# Last Updated: April 17, 2026
+
+---
+
+## Core Idea
+A standalone Claude skill that automatically tracks development actions (code, tests, features) in the background, rewarding XP, gold, and levels without requiring explicit commands for each action. Notifications appear after every tracked action, and detailed stats are available via `/gamify-character`.
+
+---
+
+## Command Structure
+Prefix: `/gamify-` (no spaces)
+
+| Command                  | Description                                                                 |
+|--------------------------|-----------------------------------------------------------------------------|
+| `/gamify-enable`         | Enable passive gamification for the current project. Prompts for theme.   |
+| `/gamify-disable`        | Disable gamification for the current project.                             |
+| `/gamify-character`      | Show level, XP, gold, achievements, and weekly stats.                     |
+| `/gamify-shop`           | Spend gold to generate code or unlock templates.                           |
+| `/gamify-quests`         | List active challenges (e.g., "Write 50 lines of code for 20 gold").       |
+| `/gamify-theme`          | Change the visual theme (e.g., fantasy, sci-fi, retro).                    |
+
+---
+
+## Passive Tracking & Notifications
+The skill automatically detects and rewards the following actions, with a notification after each:
+
+- Writing Code:
+  +1 XP and +0.5 gold per line (scalable by complexity).
+  Example notification: 📝 +30 XP, +15 gold for writing 30 lines of code!
+
+- Running Tests:
+  +30 XP and +10 gold for successful tests.
+  +10 XP for failed tests.
+  Example notification: ✅ +30 XP, +10 gold for passing tests!
+
+- Implementing Features:
+  +50 XP and +20 gold per feature (scaled by complexity).
+  Example notification: 🚀 +50 XP, +20 gold for implementing "user login"!
+
+- Debugging/Fixing Issues:
+  +20 XP and +5 gold per bug fix.
+  Example notification: 🐛 +20 XP, +5 gold for fixing a bug!
+
+- Documentation:
+  +10 XP and +2 gold per documented function/module.
+  Example notification: 📚 +10 XP, +2 gold for documenting "auth_module"!
+
+---
+
+## `/gamify-character` Output
+Displays:
+- Current level, XP, gold, and achievements.
+- Weekly statistics (XP earned, gold earned, lines of code, features implemented, tests run, bugs fixed).
+- Attributes (e.g., Code Mastery, Debugging).
+
+Example:
+🛸 LEVEL: 3 ("Engineer") | XP: 120/300
+💰 GOLD: 45
+🏆 ACHIEVEMENTS: "First Feature", "Test Pilot", "Bug Squasher"
+
+📊 WEEKLY STATS (Apr 10–17, 2026):
+- XP Earned: 220 (+50 from features, +30 from tests, +140 from code)
+- Gold Earned: 85 (+20 from features, +10 from tests, +55 from code)
+- Lines of Code: 110
+- Features Implemented: 2
+- Tests Run: 5 (3 passed, 2 failed)
+- Bugs Fixed: 3
+
+📈 ATTRIBUTES:
+- Code Mastery: Lv. 2 (3% gold discount)
+- Debugging: Lv. 1 (+10% XP from bug fixes)
+
+---
+
+## Theme Customization
+On first `/gamify-enable`, prompt the user to choose a theme:
+Choose a theme:
+1. Fantasy (⚔️ Levels: "Apprentice", "Knight", "Wizard")
+2. Sci-Fi (🚀 Levels: "Cadet", "Engineer", "Captain")
+3. Retro (🎮 Levels: "Noob", "Pro", "Legend")
+4. Minimalist (📊 Levels: "L1", "L2", "L3")
+
+Themes affect level names, achievement icons, and progress bar styles.
+
+---
+
+## Example Workflow
+User: /gamify-enable
+Claude: 🎮 Gamification enabled!
+        Choose a theme: 1. Fantasy 2. Sci-Fi 3. Retro 4. Minimalist
+User: 2
+Claude: Sci-Fi theme selected! You are now a "Cadet" (Level 1).
+        All actions will earn XP and gold automatically.
+
+--- User writes 30 lines of code ---
+Claude: 📝 +30 XP, +15 gold for writing code!
+        (Level: 1 | XP: 30/100 | Gold: 15)
+
+--- User runs tests (successful) ---
+Claude: ✅ +30 XP, +10 gold for passing tests!
+        You are now Level 2: "Engineer"!
+
+User: /gamify-character
+Claude: [Displays full character sheet with weekly stats]
+
+User: /gamify-shop
+Claude: Spend gold to generate code:
+        - Simple function: 10 gold
+        - Complex module: 30 gold
+
+---
