@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevQuest Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="{{THEME_CLASS}}">
+    <div class="dashboard">
+
+        <!-- ═══════════════════════════════════════════════════
+             HEADER — Character identity
+        ════════════════════════════════════════════════════ -->
+        <header class="character-header">
+            <div class="character-avatar" aria-hidden="true">
+                <span class="avatar-icon">⚔</span>
+            </div>
+            <div class="character-identity">
+                <h1 class="character-title">{{TITLE}}</h1>
+                <div class="character-level">
+                    <span class="level-badge">LVL <strong>{{LEVEL}}</strong></span>
+                    <span class="level-label">Developer</span>
+                </div>
+            </div>
+            <div class="header-decoration" aria-hidden="true"></div>
+        </header>
+
+        <!-- ═══════════════════════════════════════════════════
+             STATS BAR — XP + Gold
+        ════════════════════════════════════════════════════ -->
+        <section class="stats-bar" aria-label="Experience and Gold">
+            <div class="xp-block">
+                <div class="xp-label-row">
+                    <span class="xp-label">Experience</span>
+                    <span class="xp-numbers">
+                        <span class="xp-current">{{XP_PROGRESS}}</span>
+                        <span class="xp-sep">/</span>
+                        <span class="xp-needed">{{XP_NEEDED}} XP</span>
+                    </span>
+                </div>
+                <div class="progress-track" role="progressbar"
+                     aria-valuenow="{{XP_PERCENT}}"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     aria-label="XP progress">
+                    <div class="progress-fill" style="width: {{XP_PERCENT}}%"></div>
+                    <div class="progress-glow" style="left: {{XP_PERCENT}}%"></div>
+                </div>
+                <div class="xp-percent-label">{{XP_PERCENT}}% to next level</div>
+            </div>
+
+            <div class="gold-block">
+                <span class="gold-icon" aria-hidden="true">◈</span>
+                <span class="gold-amount">{{GOLD}}</span>
+                <span class="gold-label">Gold</span>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             ATTRIBUTES — Core stats
+        ════════════════════════════════════════════════════ -->
+        <section class="attributes card" aria-label="Attributes">
+            <h2 class="section-title">
+                <span class="section-icon" aria-hidden="true">◆</span>
+                Attributes
+            </h2>
+            <div class="attributes-grid">
+                {{ATTRIBUTES_HTML}}
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             QUESTS — Active objectives
+        ════════════════════════════════════════════════════ -->
+        <section class="quests card" aria-label="Active Quests">
+            <h2 class="section-title">
+                <span class="section-icon" aria-hidden="true">▶</span>
+                Active Quests
+            </h2>
+            <div class="quests-list">
+                {{QUESTS_HTML}}
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             WEEKLY STATS — Activity this week
+        ════════════════════════════════════════════════════ -->
+        <section class="weekly-stats card" aria-label="Weekly Stats">
+            <h2 class="section-title">
+                <span class="section-icon" aria-hidden="true">◉</span>
+                Weekly Activity
+            </h2>
+            <div class="stats-grid">
+                {{WEEKLY_STATS_HTML}}
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             BUFFS — Active effects
+        ════════════════════════════════════════════════════ -->
+        <section class="buffs card" aria-label="Active Buffs">
+            <h2 class="section-title">
+                <span class="section-icon" aria-hidden="true">✦</span>
+                Active Buffs
+            </h2>
+            <div class="buffs-list">
+                {{BUFFS_HTML}}
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             ACHIEVEMENTS — Unlocked badges
+        ════════════════════════════════════════════════════ -->
+        <section class="achievements card" aria-label="Achievements">
+            <h2 class="section-title">
+                <span class="section-icon" aria-hidden="true">★</span>
+                Achievements
+            </h2>
+            <ul class="achievements-list">
+                {{ACHIEVEMENTS_HTML}}
+            </ul>
+        </section>
+
+    </div><!-- /.dashboard -->
+</body>
+</html>

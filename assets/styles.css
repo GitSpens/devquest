@@ -1,0 +1,856 @@
+/* ═══════════════════════════════════════════════════════════════
+   DevQuest Dashboard — styles.css
+   Theme-driven via CSS custom properties on body.theme-*
+════════════════════════════════════════════════════════════════ */
+
+/* ── Reset & base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   THEMES — custom properties
+════════════════════════════════════════════════════════════════ */
+
+/* Fantasy: dark parchment / medieval scroll */
+body.theme-fantasy {
+    --bg:               #2a1f14;
+    --bg-secondary:     #3d2b1a;
+    --text:             #e8d5b7;
+    --text-muted:       #a0856a;
+    --accent:           #d4a017;
+    --accent-secondary: #c0392b;
+    --card-bg:          #352516;
+    --border:           #5c3d1e;
+    --progress-bg:      #1a0f08;
+    --progress-fill:    #d4a017;
+    --progress-glow:    rgba(212, 160, 23, 0.6);
+    --gold-color:       #f5c842;
+    --badge-bg:         rgba(212, 160, 23, 0.15);
+    --badge-border:     rgba(212, 160, 23, 0.4);
+    --header-gradient:  linear-gradient(135deg, #3d2b1a 0%, #2a1f14 60%, #1a0f08 100%);
+    --section-icon-color: #d4a017;
+    --avatar-bg:        radial-gradient(circle, #5c3d1e, #2a1f14);
+    --font-style:       normal;
+    --border-radius:    6px;
+    --card-shadow:      0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,160,23,0.1);
+}
+
+/* Sci-Fi: spaceship HUD */
+body.theme-scifi {
+    --bg:               #0a0e1a;
+    --bg-secondary:     #0d1426;
+    --text:             #b0c4de;
+    --text-muted:       #4a6a8a;
+    --accent:           #00e5ff;
+    --accent-secondary: #7c4dff;
+    --card-bg:          #0d1426;
+    --border:           #1a3a5c;
+    --progress-bg:      #050a14;
+    --progress-fill:    #00e5ff;
+    --progress-glow:    rgba(0, 229, 255, 0.5);
+    --gold-color:       #ffd700;
+    --badge-bg:         rgba(0, 229, 255, 0.08);
+    --badge-border:     rgba(0, 229, 255, 0.3);
+    --header-gradient:  linear-gradient(135deg, #0d1a2e 0%, #0a0e1a 60%, #050a14 100%);
+    --section-icon-color: #00e5ff;
+    --avatar-bg:        radial-gradient(circle, #1a3a5c, #0a0e1a);
+    --font-style:       normal;
+    --border-radius:    4px;
+    --card-shadow:      0 0 20px rgba(0,229,255,0.05), 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(0,229,255,0.08);
+}
+
+/* Retro: arcade / CRT screen */
+body.theme-retro {
+    --bg:               #1a1a2e;
+    --bg-secondary:     #16213e;
+    --text:             #39ff14;
+    --text-muted:       #1a8a09;
+    --accent:           #39ff14;
+    --accent-secondary: #ff00ff;
+    --card-bg:          #0f0f23;
+    --border:           #39ff14;
+    --progress-bg:      #050510;
+    --progress-fill:    #39ff14;
+    --progress-glow:    rgba(57, 255, 20, 0.6);
+    --gold-color:       #ff00ff;
+    --badge-bg:         rgba(57, 255, 20, 0.08);
+    --badge-border:     rgba(57, 255, 20, 0.5);
+    --header-gradient:  linear-gradient(135deg, #16213e 0%, #1a1a2e 60%, #0f0f23 100%);
+    --section-icon-color: #ff00ff;
+    --avatar-bg:        radial-gradient(circle, #1a3a1a, #0f0f23);
+    --font-style:       normal;
+    --border-radius:    0px;
+    --card-shadow:      0 0 8px rgba(57,255,20,0.2), 0 0 2px rgba(57,255,20,0.4);
+}
+
+/* Minimalist: clean data dashboard */
+body.theme-minimalist {
+    --bg:               #f5f5f5;
+    --bg-secondary:     #ffffff;
+    --text:             #333333;
+    --text-muted:       #777777;
+    --accent:           #2c7be5;
+    --accent-secondary: #6c757d;
+    --card-bg:          #ffffff;
+    --border:           #dddddd;
+    --progress-bg:      #e9ecef;
+    --progress-fill:    #2c7be5;
+    --progress-glow:    transparent;
+    --gold-color:       #f0a500;
+    --badge-bg:         #f0f4ff;
+    --badge-border:     #c5d4f5;
+    --header-gradient:  linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    --section-icon-color: #2c7be5;
+    --avatar-bg:        radial-gradient(circle, #e9ecef, #f5f5f5);
+    --font-style:       normal;
+    --border-radius:    8px;
+    --card-shadow:      0 1px 4px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE BODY & LAYOUT
+════════════════════════════════════════════════════════════════ */
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+}
+
+/* Retro: monospace font */
+body.theme-retro {
+    font-family: "Courier New", Courier, monospace;
+}
+
+.dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Generic card shell ────────────────────────────────────── */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    padding: 20px 24px;
+    box-shadow: var(--card-shadow);
+}
+
+/* Sci-Fi: top accent line */
+body.theme-scifi .card {
+    border-top: 2px solid var(--accent);
+}
+
+/* Retro: double border feel */
+body.theme-retro .card {
+    border: 2px solid var(--border);
+    box-shadow: 4px 4px 0px var(--accent), var(--card-shadow);
+}
+
+/* ── Section titles ────────────────────────────────────────── */
+.section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-icon {
+    color: var(--section-icon-color);
+    font-size: 11px;
+}
+
+body.theme-retro .section-title {
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+════════════════════════════════════════════════════════════════ */
+
+.character-header {
+    background: var(--header-gradient);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+/* Decorative corner element */
+.header-decoration {
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    opacity: 0.04;
+    background: var(--accent);
+    transform: translate(40px, -40px);
+    pointer-events: none;
+}
+
+body.theme-scifi .header-decoration {
+    opacity: 0.06;
+    box-shadow: 0 0 40px var(--accent);
+}
+
+body.theme-retro .header-decoration { display: none; }
+
+.character-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--avatar-bg);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+body.theme-retro .character-avatar {
+    border-radius: 0;
+    border: 2px solid var(--accent);
+}
+
+.avatar-icon {
+    font-size: 28px;
+    line-height: 1;
+}
+
+body.theme-scifi .avatar-icon { color: var(--accent); filter: drop-shadow(0 0 6px var(--accent)); }
+body.theme-retro .avatar-icon  { color: var(--accent); filter: drop-shadow(0 0 4px var(--accent)); }
+body.theme-fantasy .avatar-icon { color: var(--accent); }
+body.theme-minimalist .avatar-icon { color: var(--accent); }
+
+.character-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.character-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+}
+
+body.theme-scifi .character-title {
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 22px;
+}
+
+body.theme-retro .character-title {
+    text-shadow: 0 0 8px var(--accent), 0 0 2px var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+body.theme-fantasy .character-title {
+    font-style: italic;
+}
+
+.character-level {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.level-badge {
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: calc(var(--border-radius) * 0.8);
+    padding: 3px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+}
+
+body.theme-scifi .level-badge {
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+}
+
+body.theme-retro .level-badge {
+    border-radius: 0;
+    border: 1px solid var(--accent);
+    color: var(--accent-secondary);
+    background: transparent;
+}
+
+.level-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATS BAR — XP + Gold
+════════════════════════════════════════════════════════════════ */
+
+.stats-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+body.theme-scifi .stats-bar { border-top: 2px solid var(--accent); }
+body.theme-retro .stats-bar {
+    border: 2px solid var(--border);
+    box-shadow: 4px 4px 0px var(--accent), var(--card-shadow);
+}
+
+.xp-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.xp-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.xp-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.xp-numbers {
+    font-size: 13px;
+    color: var(--text);
+}
+
+.xp-current {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.xp-sep {
+    color: var(--text-muted);
+    margin: 0 3px;
+}
+
+.xp-needed {
+    color: var(--text-muted);
+}
+
+/* Progress bar */
+.progress-track {
+    position: relative;
+    height: 20px;
+    background: var(--progress-bg);
+    border-radius: calc(var(--border-radius) + 4px);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+body.theme-retro .progress-track {
+    border-radius: 0;
+    border: 1px solid var(--accent);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--progress-fill);
+    border-radius: calc(var(--border-radius) + 4px);
+    transition: width 0.5s ease;
+    position: relative;
+}
+
+body.theme-retro .progress-fill {
+    border-radius: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--accent) 0px,
+        var(--accent) 8px,
+        transparent 8px,
+        transparent 10px
+    );
+    animation: retro-scan 1.5s linear infinite;
+}
+
+@keyframes retro-scan {
+    0%   { background-position: 0 0; }
+    100% { background-position: 20px 0; }
+}
+
+body.theme-scifi .progress-fill {
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+
+body.theme-fantasy .progress-fill {
+    background: linear-gradient(90deg, #8b5e1a, var(--accent), #f5c842);
+}
+
+/* Glow dot at fill edge */
+.progress-glow {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--progress-glow);
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+body.theme-minimalist .progress-glow,
+body.theme-retro .progress-glow { display: none; }
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40%;
+    background: rgba(255,255,255,0.12);
+    border-radius: inherit;
+}
+
+body.theme-retro .progress-fill::after { display: none; }
+
+.xp-percent-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    letter-spacing: 0.05em;
+}
+
+/* Gold block */
+.gold-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 70px;
+    text-align: center;
+}
+
+.gold-icon {
+    font-size: 24px;
+    color: var(--gold-color);
+    line-height: 1;
+}
+
+body.theme-scifi .gold-icon,
+body.theme-retro .gold-icon {
+    filter: drop-shadow(0 0 6px var(--gold-color));
+}
+
+.gold-amount {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold-color);
+    line-height: 1.1;
+}
+
+.gold-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ATTRIBUTES
+════════════════════════════════════════════════════════════════ */
+
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+/* Each attribute rendered by Python as:
+   <div class="attribute-item">
+     <div class="attr-name">Coding</div>
+     <div class="attr-level">Lv 7</div>
+     <div class="attr-bonus">+14% XP</div>
+   </div>
+*/
+.attribute-item {
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: var(--border-radius);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+body.theme-retro .attribute-item {
+    border-radius: 0;
+    border: 1px solid var(--accent);
+}
+
+.attr-name {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.attr-level {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+}
+
+body.theme-scifi .attr-level,
+body.theme-retro .attr-level {
+    text-shadow: 0 0 8px var(--accent);
+}
+
+.attr-bonus {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   QUESTS
+════════════════════════════════════════════════════════════════ */
+
+.quests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Each quest rendered by Python as:
+   <div class="quest-item">
+     <div class="quest-header">
+       <span class="quest-name">Write 500 lines</span>
+       <span class="quest-progress-label">320 / 500</span>
+     </div>
+     <div class="quest-track">
+       <div class="quest-fill" style="width: 64%"></div>
+     </div>
+   </div>
+*/
+.quest-item {
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: var(--border-radius);
+    padding: 12px 14px;
+}
+
+body.theme-retro .quest-item {
+    border-radius: 0;
+    border: 1px solid var(--border);
+}
+
+.quest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.quest-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.quest-progress-label {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.quest-track {
+    height: 8px;
+    background: var(--progress-bg);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+body.theme-retro .quest-track {
+    border-radius: 0;
+    height: 6px;
+    border: 1px solid var(--accent-secondary);
+}
+
+.quest-fill {
+    height: 100%;
+    background: var(--accent-secondary);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+body.theme-retro .quest-fill {
+    border-radius: 0;
+    background: var(--accent-secondary);
+}
+
+body.theme-fantasy .quest-fill {
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
+}
+
+body.theme-scifi .quest-fill {
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent));
+    box-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WEEKLY STATS
+════════════════════════════════════════════════════════════════ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+/* Each stat rendered by Python as:
+   <div class="stat-item">
+     <div class="stat-value">1,240</div>
+     <div class="stat-name">Lines Written</div>
+   </div>
+*/
+.stat-item {
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: var(--border-radius);
+    padding: 14px;
+    text-align: center;
+}
+
+body.theme-retro .stat-item {
+    border-radius: 0;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+body.theme-scifi .stat-value,
+body.theme-retro .stat-value {
+    text-shadow: 0 0 10px var(--accent);
+}
+
+.stat-name {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUFFS
+════════════════════════════════════════════════════════════════ */
+
+.buffs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Each buff rendered by Python as:
+   <span class="buff-pill">
+     <span class="buff-icon">⚡</span>
+     <span class="buff-name">Speed Coder</span>
+     <span class="buff-count">×3</span>
+   </span>
+   Or plain text "No active buffs"
+*/
+.buff-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+body.theme-retro .buff-pill {
+    border-radius: 0;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+body.theme-scifi .buff-pill {
+    border-radius: 2px;
+    box-shadow: 0 0 6px rgba(0, 229, 255, 0.1);
+}
+
+.buff-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.buff-name {
+    font-weight: 600;
+}
+
+.buff-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-left: 2px;
+}
+
+body.theme-retro .buff-count { color: var(--accent-secondary); }
+
+/* No-buff placeholder text */
+.buffs-list:empty::after,
+.no-buffs {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+}
+
+body.theme-retro .no-buffs { font-style: normal; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ACHIEVEMENTS
+════════════════════════════════════════════════════════════════ */
+
+.achievements-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Each achievement rendered by Python as:
+   <li class="achievement-badge">
+     <span class="achievement-icon">🏆</span>
+     <span class="achievement-name">First Blood</span>
+   </li>
+*/
+.achievement-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: var(--border-radius);
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+body.theme-retro .achievement-badge {
+    border-radius: 0;
+    border: 1px solid var(--accent-secondary);
+    color: var(--accent-secondary);
+}
+
+body.theme-scifi .achievement-badge {
+    border-radius: 2px;
+}
+
+body.theme-fantasy .achievement-badge {
+    font-style: italic;
+    border-color: var(--accent);
+}
+
+.achievement-icon {
+    font-size: 15px;
+    line-height: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR STYLING (chromium-based browsers)
+════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar { width: 8px; background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — stack on small screens
+════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+    body { padding: 12px 10px 32px; }
+
+    .stats-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .gold-block {
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .character-header { gap: 14px; padding: 18px; }
+    .character-title  { font-size: 20px; }
+    .avatar-icon      { font-size: 22px; }
+
+    .character-avatar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .attributes-grid,
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card { padding: 16px; }
+}
+
+@media (max-width: 380px) {
+    .attributes-grid,
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
