@@ -10,6 +10,7 @@ Usage:
 """
 
 import argparse
+import io
 import json
 import math
 import os
@@ -19,6 +20,10 @@ import sys
 from datetime import datetime, timedelta
 from fnmatch import fnmatch
 from pathlib import Path
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 
 DEFAULT_EXCLUDED_PATTERNS = [
