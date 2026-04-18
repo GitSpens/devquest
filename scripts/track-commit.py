@@ -251,7 +251,7 @@ def process_rewards(state, lines_added, theme):
     if new_level > old_level:
         for lvl in range(old_level + 1, new_level + 1):
             title = get_title(theme, lvl)
-            msg = THEME_LEVELUP_MESSAGES.get(theme, THEME_LEVELUP_MESSAGES["minimalist"])
+            msg = THEME_LEVELUP_MESSAGES.get(theme, THEME_LEVELUP_MESSAGES["fantasy"])
             notifications.append(msg.format(title=title, level=lvl))
 
     # --- Quest progress ---
