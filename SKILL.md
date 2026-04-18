@@ -50,7 +50,7 @@ Then create `.devquest/` directory and write `state.json` with the initial state
 +==============================+
 ```
 
-**HTML mode**: Run `python scripts/render-html.py` passing state as JSON stdin (script reads themes/progression itself).
+**HTML mode**: Run `python scripts/render-html.py --state .devquest/state.json --theme {theme} --output .devquest/dashboard.html` — the script renders the dashboard and automatically opens it in the user's default browser. The script prints a `file://` URI — always include this URI in your response so the user can reopen it later.
 
 ## Passive Tracking
 
