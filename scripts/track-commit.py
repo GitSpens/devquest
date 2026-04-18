@@ -12,9 +12,7 @@ Usage:
 import argparse
 import io
 import json
-import math
 import os
-import re
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -137,9 +135,6 @@ def check_weekly_reset(state):
         weekly["weekly_xp_earned"] = 0
         weekly["weekly_gold_earned"] = 0
         weekly["weekly_lines_written"] = 0
-        weekly["weekly_tests_run"] = 0
-        weekly["weekly_bugs_fixed"] = 0
-        weekly["weekly_functions_documented"] = 0
         weekly["weekly_quests_completed"] = 0
 
 
@@ -344,10 +339,6 @@ def count_lines_added(excluded_patterns):
     return total
 
 
-def get_commit_message():
-    return git_cmd("log", "-1", "--format=%s")
-
-
 def get_commit_sha():
     return git_cmd("rev-parse", "HEAD")
 
@@ -358,10 +349,6 @@ def get_git_user():
 
 def get_commit_author():
     return git_cmd("log", "-1", "--format=%an")
-
-
-def is_bug_fix(message):
-    return bool(re.match(r"^fix(\(.*\))?:", message, re.IGNORECASE))
 
 
 def main():

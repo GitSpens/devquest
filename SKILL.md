@@ -1,11 +1,11 @@
 ---
 name: devquest
-description: "Gamified developer RPG that passively tracks coding, testing, debugging, and documentation to award XP, gold, and levels. Use this skill whenever the user mentions devquest, gamification, XP tracking, developer RPG, or wants to enable/disable/view gamified development stats. Also triggers on /devquest-* commands. Triggers on any development action (writing code, running tests, fixing bugs, documenting) when DevQuest is enabled for passive tracking notifications."
+description: "Gamified developer RPG that passively tracks code-writing to award XP, gold, and levels. Use this skill whenever the user mentions devquest, gamification, XP tracking, developer RPG, or wants to enable/disable/view gamified development stats. Also triggers on /devquest-* commands. Triggers on code-writing actions when DevQuest is enabled for passive tracking notifications."
 ---
 
 # DevQuest — Core Skill Router
 
-DevQuest is a gamified RPG layer for development work. It passively tracks coding, testing, debugging, and documentation to award XP, gold, levels, and achievements. State persists in `.devquest/state.json` in the project root. Reference data lives in `references/` — read the specific file indicated for each command rather than duplicating data here.
+DevQuest is a gamified RPG layer for development work. It passively tracks code-writing to award XP, gold, levels, and achievements. State persists in `.devquest/state.json` in the project root. Reference data lives in `references/` — read the specific file indicated for each command rather than duplicating data here.
 
 ## Initialization Check
 
@@ -100,8 +100,6 @@ Triggers after: writing code. Silently skip if DevQuest is disabled.
 |--------|-----|------|------|
 | Write code | 1 | 0.5 | per line |
 
-Note: Test, documentation, and debugging tracking will be added in a future phase. Currently only code-writing is tracked, both through Claude and via the git post-commit hook.
-
 ### Processing Pipeline
 
 1. Calculate base XP and gold from the table above
@@ -160,31 +158,20 @@ Update the chosen setting in state and confirm.
     "gold": 0,
     "gold_spent": 0,
     "attributes": {
-      "code_mastery": 0,
-      "debugging": 0,
-      "documentation": 0
+      "code_mastery": 0
     },
     "active_buffs": [],
     "achievements": {}
   },
   "stats": {
     "lines_written": 0,
-    "tests_run": 0,
-    "tests_passed": 0,
-    "bugs_fixed": 0,
-    "functions_documented": 0,
-    "features_completed": 0,
-    "items_purchased": 0,
-    "consecutive_passing_runs": 0
+    "items_purchased": 0
   },
   "weekly_stats": {
     "week_start": "",
     "weekly_xp_earned": 0,
     "weekly_gold_earned": 0,
     "weekly_lines_written": 0,
-    "weekly_tests_run": 0,
-    "weekly_bugs_fixed": 0,
-    "weekly_functions_documented": 0,
     "weekly_quests_completed": 0
   },
   "quests": {
@@ -192,14 +179,7 @@ Update the chosen setting in state and confirm.
     "2":  {"progress": 0, "completed": false, "claimed": false},
     "3":  {"progress": 0, "completed": false, "claimed": false},
     "4":  {"progress": 0, "completed": false, "claimed": false},
-    "5":  {"progress": 0, "completed": false, "claimed": false},
-    "6":  {"progress": 0, "completed": false, "claimed": false},
-    "7":  {"progress": 0, "completed": false, "claimed": false},
-    "8":  {"progress": 0, "completed": false, "claimed": false},
-    "9":  {"progress": 0, "completed": false, "claimed": false},
-    "10": {"progress": 0, "completed": false, "claimed": false},
-    "11": {"progress": 0, "completed": false, "claimed": false},
-    "12": {"progress": 0, "completed": false, "claimed": false}
+    "5":  {"progress": 0, "completed": false, "claimed": false}
   },
   "tracking": {
     "last_tracked_commit": null,
