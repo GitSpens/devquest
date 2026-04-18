@@ -14,12 +14,28 @@ On every invocation, attempt to read `.devquest/state.json` from the project roo
 - **File missing or `enabled: false`**: only `/devquest-enable` is functional. All other commands respond: "DevQuest is not enabled. Run /devquest-enable to start." Passive tracking does nothing (no output, no error).
 - **File exists and `enabled: true`**: check weekly reset (see `references/progression.md` Section 4) before processing any command or passive action.
 
+### Session Catch-Up
+
+After the weekly reset check, if `tracking.last_tracked_commit` is set and not null, run:
+
+```
+git log --author="<git-user>" --oneline <last_tracked_commit>..HEAD
+```
+
+If there are unprocessed commits, process each one using the reward pipeline (count lines via `git diff --numstat`). Show a summary:
+
+```
+{xp_icon} Catch-up: +{total_xp} XP, +{total_gold} Gold for {count} commits since last session!
+```
+
+If `last_tracked_commit` is null or empty, skip catch-up.
+
 ## Command Routing
 
 | Command | Read | Action |
 |---------|------|--------|
 | `/devquest-enable` | `references/themes.md` | Run Enable Flow (below) |
-| `/devquest-disable` | — | Set `enabled: false`, write state, confirm: "DevQuest disabled. Your progress is saved." |
+| `/devquest-disable` | — | Set `enabled: false`, remove DevQuest section from `.git/hooks/post-commit` (between BEGIN/END markers), write state, confirm: "DevQuest disabled. Your progress is saved." |
 | `/devquest-character` | `references/themes.md`, `references/progression.md` | Render character sheet in configured display mode |
 | `/devquest-shop` | `references/economy.md` | Show catalog with prices and gold balance, or process a numbered purchase |
 | `/devquest-quests` | `references/quests.md` | Show quest list grouped by active/completed with progress bars |
@@ -35,6 +51,28 @@ Prompt the user with numbered options for each choice:
 3. **Display mode**: 1. Markdown  2. HTML
 
 Then create `.devquest/` directory and write `state.json` with the initial state schema (below). Show the themed welcome message from `references/themes.md`.
+
+After writing state.json, install the git post-commit hook:
+
+1. Check if `.git/hooks/post-commit` exists
+2. If it exists, check for the `# --- BEGIN DevQuest hook` marker
+3. If no existing hook: create `.git/hooks/post-commit` with a shebang and the DevQuest hook block
+4. If existing hook without DevQuest marker: append the DevQuest block to the end
+5. If DevQuest marker already present: skip (idempotent)
+6. Make the hook executable (`chmod +x`)
+
+The hook block content (resolve the path and theme at install time):
+
+```bash
+# --- BEGIN DevQuest hook — do not remove ---
+DEVQUEST_SCRIPT="<absolute-path-to-skill>/scripts/track-commit.py"
+if command -v python3 &>/dev/null; then
+    python3 "$DEVQUEST_SCRIPT" --state ".devquest/state.json" --theme "<theme>" 2>/dev/null || true
+elif command -v python &>/dev/null; then
+    python "$DEVQUEST_SCRIPT" --state ".devquest/state.json" --theme "<theme>" 2>/dev/null || true
+fi
+# --- END DevQuest hook ---
+```
 
 ## Character Sheet
 
@@ -54,18 +92,15 @@ Then create `.devquest/` directory and write `state.json` with the initial state
 
 ## Passive Tracking
 
-Triggers after: writing code, running tests, fixing bugs, documenting functions, implementing features. Silently skip if DevQuest is disabled.
+Triggers after: writing code. Silently skip if DevQuest is disabled.
 
 ### Base Rewards
 
 | Action | XP | Gold | Unit |
 |--------|-----|------|------|
 | Write code | 1 | 0.5 | per line |
-| Test pass | 30 | 10 | per run |
-| Test fail | 10 | 0 | per run |
-| Feature | 50 | 20 | each |
-| Bug fix | 20 | 5 | each |
-| Document | 10 | 2 | per function |
+
+Note: Test, documentation, and debugging tracking will be added in a future phase. Currently only code-writing is tracked, both through Claude and via the git post-commit hook.
 
 ### Processing Pipeline
 
@@ -73,7 +108,7 @@ Triggers after: writing code, running tests, fixing bugs, documenting functions,
 2. Apply attribute bonuses — read `references/progression.md` Section 3 for formula
 3. Apply active buff multipliers — read `references/economy.md` Buff Processing Rules
 4. Round final values to nearest integer
-5. Update state: add XP, gold; increment relevant stat counters (lifetime + weekly)
+5. Update state: add XP, gold; increment `lines_written` stat counter (lifetime + weekly)
 6. Decrement `actions_remaining` on all active buffs; remove expired
 7. Check level-up — read `references/progression.md` Section 1 for thresholds
 8. Check quest progress — read `references/quests.md` for tracking rules
@@ -93,7 +128,7 @@ On level-up, append the themed level-up message from `references/themes.md`. On 
 
 Before generating code for the user:
 
-1. Estimate lines; compute cost: `ceil(estimated_lines * 0.5)` gold
+1. Estimate lines; compute cost: `ceil(estimated_lines * 1.0)` gold
 2. Show: "This will cost ~{cost} gold. You have {balance} gold. Proceed? (y/n)"
 3. If insufficient gold, block and suggest earning more. Mention Gold Rush buff if in inventory (note: it boosts gold earned, not cost)
 4. On confirm: deduct gold, generate code. Generated code does NOT earn passive XP/gold
@@ -165,6 +200,10 @@ Update the chosen setting in state and confirm.
     "10": {"progress": 0, "completed": false, "claimed": false},
     "11": {"progress": 0, "completed": false, "claimed": false},
     "12": {"progress": 0, "completed": false, "claimed": false}
+  },
+  "tracking": {
+    "last_tracked_commit": null,
+    "excluded_patterns": ["*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock", "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico", "*.woff", "*.woff2", "*.ttf", "*.eot"]
   }
 }
 ```
