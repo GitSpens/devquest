@@ -412,4 +412,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"[DevQuest] Warning: tracking failed ({e})", file=sys.stderr)
+        sys.exit(0)
