@@ -9,13 +9,8 @@ Read this file for shop items, buff mechanics, and code generation cost rules.
 | ID | Item | Type | Price | Effect |
 |----|------|------|-------|--------|
 | 1 | Code Mastery +1 | stat_boost | 50 | +1 to code_mastery attribute (permanent) |
-| 2 | Debug Insight +1 | stat_boost | 50 | +1 to debugging attribute (permanent) |
-| 3 | Doc Scholar +1 | stat_boost | 40 | +1 to documentation attribute (permanent) |
-| 4 | Test XP Boost | buff | 30 | +50% XP from tests, 10 actions |
-| 5 | Code XP Boost | buff | 30 | +50% XP from writing code, 10 actions |
-| 6 | Gold Rush | buff | 25 | +25% gold from all sources, 15 actions |
-| 7 | Bug Bounty | buff | 20 | +100% XP from bug fixes, 5 actions |
-| 8 | Scholar's Focus | buff | 20 | +100% XP from docs, 5 actions |
+| 2 | Code XP Boost | buff | 30 | +50% XP from writing code, 10 actions |
+| 3 | Gold Rush | buff | 25 | +25% gold from all sources, 15 actions |
 
 ---
 
@@ -38,7 +33,7 @@ When a player attempts to purchase an item, follow these steps in order:
 When a buff is added to a player's active buffs list, it must follow this structure:
 
 ```json
-{"id": "test_xp_boost", "name": "Test XP Boost", "effect": {"target": "test_xp", "multiplier": 1.5}, "actions_remaining": 10}
+{"id": "code_xp_boost", "name": "Code XP Boost", "effect": {"target": "code_xp", "multiplier": 1.5}, "actions_remaining": 10}
 ```
 
 Fields:
@@ -54,11 +49,8 @@ Fields:
 
 | Target | Applies To |
 |--------|-----------|
-| `test_xp` | XP from tests |
 | `code_xp` | XP from writing code |
 | `all_gold` | Gold from any source |
-| `bugfix_xp` | XP from bug fixes |
-| `docs_xp` | XP from documentation |
 
 ---
 

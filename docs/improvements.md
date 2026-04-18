@@ -19,7 +19,12 @@ Track documentation of functions/modules to award XP/gold. Could be detected via
 
 Base rewards: 10 XP, 2 Gold per function documented.
 
-### 4. Non-git activity tracking
+### 4. Bug fix / debugging tracking (deferred from v1)
+Track bug fixes to award XP/gold. Could be detected via commit message convention (`fix:` prefix) in the post-commit hook, or via IDE/tool integrations. Includes debugging attribute (+10% XP per level from bug fixes) and related quests/achievements.
+
+Base rewards: Bug fix = 20 XP, 5 Gold each.
+
+### 5. Non-git activity tracking
 Extend tracking beyond git to support other software integrations (IDE plugins, file watchers, etc.) for environments where git isn't the primary workflow.
 
 ---
