@@ -30,6 +30,7 @@ DEFAULT_EXCLUDED_PATTERNS = [
     "*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock",
     "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico",
     "*.woff", "*.woff2", "*.ttf", "*.eot",
+    ".devquest/*",
 ]
 
 # ---------------------------------------------------------------------------
@@ -325,7 +326,8 @@ def git_cmd(*args):
 
 
 def count_lines_added(excluded_patterns):
-    output = git_cmd("diff", "--numstat", "HEAD~1", "HEAD")
+    # diff-tree with --root handles both first commits and normal commits
+    output = git_cmd("diff-tree", "--numstat", "--root", "HEAD")
     if not output:
         return 0
     total = 0
@@ -371,6 +373,14 @@ def main():
     git_user = get_git_user()
     commit_author = get_commit_author()
     if git_user and commit_author and git_user != commit_author:
+        sys.exit(0)
+
+    # Skip merge commits (2+ parents) — merged code was already tracked
+    parent_count = git_cmd("rev-list", "--parents", "-n1", "HEAD")
+    if parent_count and len(parent_count.split()) > 2:
+        commit_sha = get_commit_sha()
+        state.setdefault("tracking", {})["last_tracked_commit"] = commit_sha
+        save_state(args.state, state)
         sys.exit(0)
 
     excluded = get_excluded_patterns(state, args.state)
