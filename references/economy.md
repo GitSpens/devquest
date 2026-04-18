@@ -79,17 +79,17 @@ When calculating XP or gold rewards for an action, apply active buffs using thes
 ### Formula
 
 ```
-cost = ceil(estimated_lines * 0.5)
+cost = ceil(estimated_lines * 1.0)
 ```
 
 ### Line Estimation Heuristic
 
 | Request Size | Estimated Lines | Computed Cost |
 |--------------|----------------|---------------|
-| Small (1–20 lines) | 10 | 5 gold |
-| Medium (20–50 lines) | 35 | 18 gold |
-| Large (50–100 lines) | 75 | 38 gold |
-| Very Large (100+ lines) | Use actual estimate | ceil(estimate * 0.5) |
+| Small (1–20 lines) | 10 | 10 gold |
+| Medium (20–50 lines) | 35 | 35 gold |
+| Large (50–100 lines) | 75 | 75 gold |
+| Very Large (100+ lines) | Use actual estimate | ceil(estimate * 1.0) |
 
 ### Gate Flow
 

@@ -93,7 +93,7 @@ On level-up, append the themed level-up message from `references/themes.md`. On 
 
 Before generating code for the user:
 
-1. Estimate lines; compute cost: `ceil(estimated_lines * 0.5)` gold
+1. Estimate lines; compute cost: `ceil(estimated_lines * 1.0)` gold
 2. Show: "This will cost ~{cost} gold. You have {balance} gold. Proceed? (y/n)"
 3. If insufficient gold, block and suggest earning more. Mention Gold Rush buff if in inventory (note: it boosts gold earned, not cost)
 4. On confirm: deduct gold, generate code. Generated code does NOT earn passive XP/gold
