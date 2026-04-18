@@ -429,6 +429,7 @@ def parse_args(argv=None):
     parser.add_argument("--state",  required=True, help="Path to .devquest/state.json")
     parser.add_argument("--theme",  required=True, help="Theme name (fantasy, scifi, retro, minimalist)")
     parser.add_argument("--output", required=True, help="Path to write the output HTML file")
+    parser.add_argument("--no-open", action="store_true", help="Skip opening the dashboard in the default browser")
     return parser.parse_args(argv)
 
 
@@ -523,7 +524,13 @@ def main(argv=None):
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")
 
+    file_uri = output_path.resolve().as_uri()
     print(f"Dashboard written to {output_path}")
+    print(f"Open in browser: {file_uri}")
+
+    if not args.no_open:
+        import webbrowser
+        webbrowser.open(output_path.resolve().as_uri())
 
 
 if __name__ == "__main__":
