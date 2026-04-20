@@ -448,7 +448,7 @@ def main(argv=None):
         print(f"Error: invalid JSON in state file: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    theme = args.theme.lower()
+    theme = args.theme.lower().replace("-", "").replace("_", "")
     if theme not in LEVEL_TITLES:
         print(f"Warning: unknown theme '{theme}', falling back to minimalist", file=sys.stderr)
         theme = "minimalist"

@@ -379,7 +379,7 @@ def main():
         save_state(args.state, state)
         sys.exit(0)
 
-    theme = args.theme.lower()
+    theme = args.theme.lower().replace("-", "").replace("_", "")
     if theme not in LEVEL_TITLES:
         theme = "minimalist"
 
