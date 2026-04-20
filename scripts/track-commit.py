@@ -25,9 +25,25 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
 
 
 DEFAULT_EXCLUDED_PATTERNS = [
+    # Lockfiles and generated
     "*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock",
-    "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico",
+    "*.map",
+    # Images and fonts
+    "*.svg", "*.png", "*.jpg", "*.gif", "*.ico",
     "*.woff", "*.woff2", "*.ttf", "*.eot",
+    # Config and boilerplate
+    "*.yml", "*.yaml", "*.json", "*.toml", "*.ini", "*.cfg", "*.conf",
+    "*.xml", "*.plist", "*.properties",
+    "*.env", "*.env.*",
+    # CI/CD and tooling
+    "Dockerfile", "docker-compose*", ".dockerignore",
+    ".gitignore", ".gitattributes", ".editorconfig", ".prettierrc",
+    ".eslintrc", ".stylelintrc", "tsconfig.json", "jest.config.*",
+    "Makefile", "Procfile",
+    # Docs and text
+    "*.md", "*.txt", "*.rst", "*.csv",
+    "LICENSE*", "CHANGELOG*",
+    # DevQuest
     ".devquest/*",
 ]
 

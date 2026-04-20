@@ -210,7 +210,7 @@ Update the chosen setting in state and confirm.
   },
   "tracking": {
     "last_tracked_commit": null,
-    "excluded_patterns": ["*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock", "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico", "*.woff", "*.woff2", "*.ttf", "*.eot"]
+    "excluded_patterns": ["*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock", "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico", "*.woff", "*.woff2", "*.ttf", "*.eot", "*.yml", "*.yaml", "*.json", "*.toml", "*.ini", "*.cfg", "*.conf", "*.xml", "*.plist", "*.properties", "*.env", "*.env.*", "Dockerfile", "docker-compose*", ".dockerignore", ".gitignore", ".gitattributes", ".editorconfig", ".prettierrc", ".eslintrc", ".stylelintrc", "tsconfig.json", "jest.config.*", "Makefile", "Procfile", "*.md", "*.txt", "*.rst", "*.csv", "LICENSE*", "CHANGELOG*"]
   }
 }
 ```
