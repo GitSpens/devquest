@@ -1,6 +1,6 @@
 ---
 name: devquest
-description: "Gamified developer RPG that passively tracks code-writing to award XP, gold, and levels. Use this skill whenever the user mentions devquest, gamification, XP tracking, developer RPG, or wants to enable/disable/view gamified development stats. Also triggers on /devquest-* commands. Triggers on code-writing actions when DevQuest is enabled for passive tracking notifications."
+description: "Gamified developer RPG that passively tracks code-writing to award XP, gold, and levels. Use this skill whenever the user mentions devquest, gamification, XP tracking, developer RPG, or wants to enable/disable/view gamified development stats. Also triggers on /devquest-* commands. IMPORTANT: You MUST invoke this skill BEFORE generating, writing, creating, or implementing any code when a .devquest/state.json file exists in the project root — the skill enforces a gold-cost gate that requires user confirmation before code generation."
 ---
 
 # DevQuest — Core Skill Router
@@ -35,7 +35,7 @@ If `last_tracked_commit` is null or empty, skip catch-up.
 | Command | Read | Action |
 |---------|------|--------|
 | `/devquest-enable` | `references/themes.md` | Run Enable Flow (below) |
-| `/devquest-disable` | — | Set `enabled: false`, remove DevQuest section from `.git/hooks/post-commit` (between BEGIN/END markers), write state, confirm: "DevQuest disabled. Your progress is saved." |
+| `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/install-hook.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
 | `/devquest-character` | `references/themes.md`, `references/progression.md` | Render character sheet in configured display mode |
 | `/devquest-shop` | `references/economy.md` | Show catalog with prices and gold balance, or process a numbered purchase |
 | `/devquest-quests` | `references/quests.md` | Show quest list grouped by active/completed with progress bars |
@@ -52,27 +52,15 @@ Prompt the user with numbered options for each choice:
 
 Then create `.devquest/` directory and write `state.json` with the initial state schema (below). Show the themed welcome message from `references/themes.md`.
 
-After writing state.json, install the git post-commit hook:
+After writing state.json, install the git post-commit hook by running:
 
-1. Check if `.git/hooks/post-commit` exists
-2. If it exists, check for the `# --- BEGIN DevQuest hook` marker
-3. If no existing hook: create `.git/hooks/post-commit` with a shebang and the DevQuest hook block
-4. If existing hook without DevQuest marker: append the DevQuest block to the end
-5. If DevQuest marker already present: skip (idempotent)
-6. Make the hook executable (`chmod +x`)
-
-The hook block content (resolve the path and theme at install time):
-
-```bash
-# --- BEGIN DevQuest hook — do not remove ---
-DEVQUEST_SCRIPT="<absolute-path-to-skill>/scripts/track-commit.py"
-if command -v python3 &>/dev/null; then
-    python3 "$DEVQUEST_SCRIPT" --state ".devquest/state.json" --theme "<theme>" 2>/dev/null || true
-elif command -v python &>/dev/null; then
-    python "$DEVQUEST_SCRIPT" --state ".devquest/state.json" --theme "<theme>" 2>/dev/null || true
-fi
-# --- END DevQuest hook ---
 ```
+python <skill-path>/scripts/install-hook.py --repo <project-root> --theme <theme>
+```
+
+The script is idempotent — it creates the hook file if missing, appends the DevQuest block if an existing hook has no DevQuest marker, or updates the block if one already exists. It also handles `chmod +x`.
+
+**You MUST run this script** — do not attempt to write the hook file manually.
 
 ## Character Sheet
 
@@ -89,6 +77,54 @@ fi
 ```
 
 **HTML mode**: Run `python scripts/render-html.py --state .devquest/state.json --theme {theme} --output .devquest/dashboard.html` — the script renders the dashboard and automatically opens it in the user's default browser. The script prints a `file://` URI — always include this URI in your response so the user can reopen it later.
+
+## Code Generation Gate — MANDATORY
+
+**This gate MUST fire before ANY code generation.** If the user asks you to write, create, generate, implement, or scaffold code and DevQuest is enabled, you MUST run the gate before producing any code. No exceptions.
+
+### How to run the gate
+
+1. **Estimate lines** the request will produce (use your judgment):
+   - Small (1–20 lines): ~10
+   - Medium (20–50 lines): ~35
+   - Large (50–100 lines): ~75
+   - Very Large (100+): use your best estimate
+2. **Check gold balance** by running:
+   ```
+   python <skill-path>/scripts/check-gold-gate.py --state .devquest/state.json --lines <estimated_lines>
+   ```
+   The script outputs JSON: `{"cost": N, "balance": N, "sufficient": true/false, "has_gold_rush": true/false}`
+3. **If sufficient** — Show the user:
+   > ⚔️ This will cost ~{cost} gold. You have {balance} gold. Proceed? (y/n)
+   
+   If the user has a Gold Rush buff, mention it but clarify it boosts gold *earned*, not gold *spent*.
+   
+   Wait for the user to confirm before generating any code.
+4. **If insufficient** — Block generation and show:
+   > 🚫 Not enough gold! This would cost ~{cost} gold but you only have {balance}. Write more code manually and commit to earn gold!
+   
+   Do NOT generate any code.
+5. **On user confirmation** — Deduct gold:
+   ```
+   python <skill-path>/scripts/check-gold-gate.py --state .devquest/state.json --lines <estimated_lines> --deduct
+   ```
+   Then generate the code. Generated code does NOT earn passive XP/gold.
+
+### What counts as code generation
+
+Any request where Claude writes code that will end up in the project's source files:
+- "Write a function that..."
+- "Create a component for..."
+- "Implement the API endpoint..."
+- "Add error handling to..."
+- "Refactor this to..."
+- Using Edit or Write tools to add new code
+
+Does NOT count (no gate needed):
+- Explaining code
+- Answering questions
+- Writing shell commands for the user to run
+- Editing DevQuest's own files
 
 ## Passive Tracking
 
@@ -121,15 +157,6 @@ Triggers after: writing code. Silently skip if DevQuest is disabled.
 ```
 
 On level-up, append the themed level-up message from `references/themes.md`. On achievement unlock, append `ACHIEVEMENT UNLOCKED: {name}!`. On quest complete, append `QUEST COMPLETE: {name}! +{xp} XP, +{gold} Gold`.
-
-## Code Generation Gate
-
-Before generating code for the user:
-
-1. Estimate lines; compute cost: `ceil(estimated_lines * 1.0)` gold
-2. Show: "This will cost ~{cost} gold. You have {balance} gold. Proceed? (y/n)"
-3. If insufficient gold, block and suggest earning more. Mention Gold Rush buff if in inventory (note: it boosts gold earned, not cost)
-4. On confirm: deduct gold, generate code. Generated code does NOT earn passive XP/gold
 
 ## Settings Handler
 
