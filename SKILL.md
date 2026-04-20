@@ -35,7 +35,7 @@ If `last_tracked_commit` is null or empty, skip catch-up.
 | Command | Read | Action |
 |---------|------|--------|
 | `/devquest-enable` | `references/themes.md` | Run Enable Flow (below) |
-| `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/install-hook.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
+| `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/setup-project.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
 | `/devquest-character` | `references/themes.md`, `references/progression.md` | Render character sheet in configured display mode |
 | `/devquest-shop` | `references/economy.md` | Show catalog with prices and gold balance, or process a numbered purchase |
 | `/devquest-quests` | `references/quests.md` | Show quest list grouped by active/completed with progress bars |
@@ -44,23 +44,23 @@ If `last_tracked_commit` is null or empty, skip catch-up.
 
 ## Enable Flow
 
-Prompt the user with numbered options for each choice:
-
-1. **Environment**: 1. CLI  2. Desktop
-2. **Theme**: 1. Fantasy  2. Sci-Fi  3. Retro  4. Minimalist
-3. **Display mode**: 1. Markdown  2. HTML
-
-Then create `.devquest/` directory and write `state.json` with the initial state schema (below). Show the themed welcome message from `references/themes.md`.
-
-After writing state.json, install the git post-commit hook by running:
+**Step 1 — IMMEDIATELY run the enable script.** This is the FIRST thing you do, before any conversation:
 
 ```
-python <skill-path>/scripts/install-hook.py --repo <project-root> --theme <theme>
+python <skill-path>/scripts/devquest-enable.py --repo <project-root>
 ```
 
-The script is idempotent — it creates the hook file if missing, appends the DevQuest block if an existing hook has no DevQuest marker, or updates the block if one already exists. It also handles `chmod +x`.
+This creates state.json with sensible defaults (fantasy theme, CLI, markdown) AND installs the git hook AND configures permissions. Everything is set up after this one command.
 
-**You MUST run this script** — do not attempt to write the hook file manually.
+**Step 2 — Show the themed welcome message** from `references/themes.md` and offer customization:
+
+> Want to customize your setup? You can change:
+> 1. Theme (currently Fantasy) — run /devquest-theme
+> 2. Display mode (currently Markdown) — run /devquest-settings
+>
+> Or just start coding to earn XP!
+>
+> 💡 **Tip:** Start a new Claude Code session for the smoothest experience — this lets the newly installed permissions take effect so DevQuest commands run seamlessly without approval prompts.
 
 ## Character Sheet
 
@@ -170,49 +170,4 @@ Update the chosen setting in state and confirm.
 
 ## Initial State Schema
 
-```json
-{
-  "enabled": true,
-  "settings": {
-    "environment": "cli",
-    "theme": "fantasy",
-    "display_mode": "markdown"
-  },
-  "character": {
-    "name": "",
-    "level": 1,
-    "total_xp_earned": 0,
-    "gold": 0,
-    "gold_spent": 0,
-    "attributes": {
-      "code_mastery": 0
-    },
-    "active_buffs": [],
-    "achievements": {}
-  },
-  "stats": {
-    "lines_written": 0,
-    "items_purchased": 0
-  },
-  "weekly_stats": {
-    "week_start": "",
-    "weekly_xp_earned": 0,
-    "weekly_gold_earned": 0,
-    "weekly_lines_written": 0,
-    "weekly_quests_completed": 0
-  },
-  "quests": {
-    "1":  {"progress": 0, "completed": false, "claimed": false},
-    "2":  {"progress": 0, "completed": false, "claimed": false},
-    "3":  {"progress": 0, "completed": false, "claimed": false},
-    "4":  {"progress": 0, "completed": false, "claimed": false},
-    "5":  {"progress": 0, "completed": false, "claimed": false}
-  },
-  "tracking": {
-    "last_tracked_commit": null,
-    "excluded_patterns": ["*.lock", "*.min.js", "*.min.css", "package-lock.json", "yarn.lock", "*.map", "*.svg", "*.png", "*.jpg", "*.gif", "*.ico", "*.woff", "*.woff2", "*.ttf", "*.eot", "*.yml", "*.yaml", "*.json", "*.toml", "*.ini", "*.cfg", "*.conf", "*.xml", "*.plist", "*.properties", "*.env", "*.env.*", "Dockerfile", "docker-compose*", ".dockerignore", ".gitignore", ".gitattributes", ".editorconfig", ".prettierrc", ".eslintrc", ".stylelintrc", "tsconfig.json", "jest.config.*", "Makefile", "Procfile", "*.md", "*.txt", "*.rst", "*.csv", "LICENSE*", "CHANGELOG*"]
-  }
-}
-```
-
-During enable, set `character.name` to the user's preferred name (ask them), and `weekly_stats.week_start` to the current Monday's date (YYYY-MM-DD).
+The state schema is defined in `scripts/devquest-enable.py`. The enable script creates state.json with sensible defaults, sets the player name from git config, and initializes weekly stats. Do not create state.json manually — always use the enable script.
