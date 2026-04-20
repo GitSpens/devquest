@@ -35,7 +35,7 @@ If `last_tracked_commit` is null or empty, skip catch-up.
 | Command | Read | Action |
 |---------|------|--------|
 | `/devquest-enable` | `references/themes.md` | Run Enable Flow (below) |
-| `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/install-hook.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
+| `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/install-hook.py --repo <project-root> --uninstall`, run `python <skill-path>/scripts/setup-permissions.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
 | `/devquest-character` | `references/themes.md`, `references/progression.md` | Render character sheet in configured display mode |
 | `/devquest-shop` | `references/economy.md` | Show catalog with prices and gold balance, or process a numbered purchase |
 | `/devquest-quests` | `references/quests.md` | Show quest list grouped by active/completed with progress bars |
@@ -52,15 +52,19 @@ Prompt the user with numbered options for each choice:
 
 Then create `.devquest/` directory and write `state.json` with the initial state schema (below). Show the themed welcome message from `references/themes.md`.
 
-After writing state.json, install the git post-commit hook by running:
+After writing state.json:
 
-```
-python <skill-path>/scripts/install-hook.py --repo <project-root> --theme <theme>
-```
+1. **Install the git post-commit hook** by running:
+   ```
+   python <skill-path>/scripts/install-hook.py --repo <project-root> --theme <theme>
+   ```
+   The script is idempotent. **You MUST run this script** — do not attempt to write the hook file manually.
 
-The script is idempotent — it creates the hook file if missing, appends the DevQuest block if an existing hook has no DevQuest marker, or updates the block if one already exists. It also handles `chmod +x`.
-
-**You MUST run this script** — do not attempt to write the hook file manually.
+2. **Install permissions** for seamless operation by running:
+   ```
+   python <skill-path>/scripts/setup-permissions.py --repo <project-root>
+   ```
+   This adds DevQuest entries to `.claude/settings.json` so all operations run without per-action permission prompts. **You MUST run this script** — do not write permissions manually.
 
 ## Character Sheet
 
