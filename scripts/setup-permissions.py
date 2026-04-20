@@ -3,7 +3,7 @@
 DevQuest Permission Installer
 
 Adds (or removes) DevQuest permission entries in a project's
-.claude/settings.json so all DevQuest operations run without
+.claude/settings.local.json so all DevQuest operations run without
 per-action approval prompts.
 
 Usage:
@@ -49,8 +49,8 @@ def save_settings(settings_path, settings):
 
 
 def install_permissions(repo_path):
-    """Add DevQuest permissions to .claude/settings.json. Returns (success, message)."""
-    settings_path = os.path.join(repo_path, ".claude", "settings.json")
+    """Add DevQuest permissions to .claude/settings.local.json. Returns (success, message)."""
+    settings_path = os.path.join(repo_path, ".claude", "settings.local.json")
     settings = load_settings(settings_path)
 
     permissions = settings.setdefault("permissions", {})
@@ -67,8 +67,8 @@ def install_permissions(repo_path):
 
 
 def uninstall_permissions(repo_path):
-    """Remove DevQuest permissions from .claude/settings.json. Returns (success, message)."""
-    settings_path = os.path.join(repo_path, ".claude", "settings.json")
+    """Remove DevQuest permissions from .claude/settings.local.json. Returns (success, message)."""
+    settings_path = os.path.join(repo_path, ".claude", "settings.local.json")
     settings = load_settings(settings_path)
 
     permissions = settings.get("permissions", {})

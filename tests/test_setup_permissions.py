@@ -22,7 +22,7 @@ class TestInstallPermissions(unittest.TestCase):
             success, msg = perms.install_permissions(tmp)
             self.assertTrue(success)
 
-            settings_path = os.path.join(tmp, ".claude", "settings.json")
+            settings_path = os.path.join(tmp, ".claude", "settings.local.json")
             self.assertTrue(os.path.exists(settings_path))
 
             with open(settings_path, encoding="utf-8") as f:
@@ -36,7 +36,7 @@ class TestInstallPermissions(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             settings_dir = os.path.join(tmp, ".claude")
             os.makedirs(settings_dir)
-            settings_path = os.path.join(settings_dir, "settings.json")
+            settings_path = os.path.join(settings_dir, "settings.local.json")
             with open(settings_path, "w") as f:
                 json.dump({"permissions": {"allow": ["Bash(npm test)"]}}, f)
 
@@ -55,7 +55,7 @@ class TestInstallPermissions(unittest.TestCase):
             perms.install_permissions(tmp)
             perms.install_permissions(tmp)
 
-            settings_path = os.path.join(tmp, ".claude", "settings.json")
+            settings_path = os.path.join(tmp, ".claude", "settings.local.json")
             with open(settings_path, encoding="utf-8") as f:
                 settings = json.load(f)
 
@@ -67,7 +67,7 @@ class TestInstallPermissions(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             settings_dir = os.path.join(tmp, ".claude")
             os.makedirs(settings_dir)
-            settings_path = os.path.join(settings_dir, "settings.json")
+            settings_path = os.path.join(settings_dir, "settings.local.json")
             with open(settings_path, "w") as f:
                 json.dump({"model": "opus", "permissions": {"allow": []}}, f)
 
@@ -86,7 +86,7 @@ class TestUninstallPermissions(unittest.TestCase):
             success, msg = perms.uninstall_permissions(tmp)
             self.assertTrue(success)
 
-            settings_path = os.path.join(tmp, ".claude", "settings.json")
+            settings_path = os.path.join(tmp, ".claude", "settings.local.json")
             with open(settings_path, encoding="utf-8") as f:
                 settings = json.load(f)
 
@@ -96,7 +96,7 @@ class TestUninstallPermissions(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             settings_dir = os.path.join(tmp, ".claude")
             os.makedirs(settings_dir)
-            settings_path = os.path.join(settings_dir, "settings.json")
+            settings_path = os.path.join(settings_dir, "settings.local.json")
             with open(settings_path, "w") as f:
                 json.dump({"permissions": {"allow": ["Bash(npm test)"]}}, f)
 
