@@ -26,9 +26,8 @@ DEVQUEST_PERMISSIONS = [
     "Bash(python *scripts/track-commit.py*)",
     "Bash(python *scripts/render-html.py*)",
     "Bash(python *scripts/setup-permissions.py*)",
-    "Read(.devquest/*)",
-    "Edit(.devquest/*)",
-    "Write(.devquest/*)",
+    "Read(.devquest/**)",
+    "Edit(.devquest/**)",
 ]
 
 
