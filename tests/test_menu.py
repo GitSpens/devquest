@@ -63,5 +63,43 @@ class TestThemeMenu(unittest.TestCase):
             self.assertTrue(540 < delta < 660)
 
 
+class TestSettingsMenus(unittest.TestCase):
+    def test_settings_router_no_pending_action(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            payload = menu.build_payload(tmp, "settings")
+            self.assertEqual(len(payload["options"]), 3)
+            self.assertEqual(payload["header"], "Settings")
+            pending = Path(tmp) / ".devquest" / "pending-action.json"
+            self.assertFalse(pending.exists())
+
+    def test_settings_environment_writes_pending(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            menu.build_payload(tmp, "settings-environment")
+            pending_path = Path(tmp) / ".devquest" / "pending-action.json"
+            self.assertTrue(pending_path.exists())
+            with open(pending_path) as f:
+                pending = json.load(f)
+            self.assertEqual(pending["action"], "environment")
+            self.assertEqual(set(pending["allowed_values"]), {"cli", "desktop"})
+
+    def test_settings_display_mode_action_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            menu.build_payload(tmp, "settings-display-mode")
+            with open(Path(tmp) / ".devquest" / "pending-action.json") as f:
+                pending = json.load(f)
+            self.assertEqual(pending["action"], "display-mode")
+
+    def test_settings_theme_action_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            menu.build_payload(tmp, "settings-theme")
+            with open(Path(tmp) / ".devquest" / "pending-action.json") as f:
+                pending = json.load(f)
+            self.assertEqual(pending["action"], "theme")
+
+
 if __name__ == "__main__":
     unittest.main()
