@@ -101,5 +101,37 @@ class TestSettingsMenus(unittest.TestCase):
             self.assertEqual(pending["action"], "theme")
 
 
+class TestShopMenu(unittest.TestCase):
+    def test_payload_has_all_items(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp, character={"gold": 100, "gold_spent": 0, "attributes": {"code_mastery": 0}, "active_buffs": [], "purchased_one_time_items": []})
+            payload = menu.build_payload(tmp, "shop")
+            self.assertEqual(payload["header"], "Shop")
+            self.assertEqual(len(payload["options"]), 3)
+            with open(Path(tmp) / ".devquest" / "pending-action.json") as f:
+                pending = json.load(f)
+            self.assertEqual(pending["action"], "buy")
+            self.assertEqual(
+                set(pending["allowed_values"]),
+                {"code_mastery_plus_1", "code_xp_boost", "gold_rush"},
+            )
+
+    def test_unaffordable_items_marked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp, character={"gold": 10, "gold_spent": 0, "attributes": {"code_mastery": 0}, "active_buffs": [], "purchased_one_time_items": []})
+            payload = menu.build_payload(tmp, "shop")
+            descriptions = {o["value"]: o["description"] for o in payload["options"]}
+            self.assertIn("locked", descriptions["code_mastery_plus_1"])
+            self.assertIn("locked", descriptions["code_xp_boost"])
+            self.assertIn("locked", descriptions["gold_rush"])
+
+    def test_description_includes_price(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp, character={"gold": 100, "gold_spent": 0, "attributes": {"code_mastery": 0}, "active_buffs": [], "purchased_one_time_items": []})
+            payload = menu.build_payload(tmp, "shop")
+            desc = next(o["description"] for o in payload["options"] if o["value"] == "code_mastery_plus_1")
+            self.assertIn("50", desc)
+
+
 if __name__ == "__main__":
     unittest.main()

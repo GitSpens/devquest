@@ -49,8 +49,20 @@ def _options_for(kind: str, state: dict, cfg: dict) -> list:
 
 
 def _shop_options(state: dict, cfg: dict) -> list:
-    # Filled in in Task 8.
-    raise NotImplementedError("Shop menu not yet implemented.")
+    gold = state.get("character", {}).get("gold", 0)
+    owned_one_time = set(state.get("character", {}).get("purchased_one_time_items", []))
+    options = []
+    for item in cfg["shop_items"]:
+        if item.get("one_time") and item["id"] in owned_one_time:
+            continue
+        price = item["price"]
+        base_desc = f"{price} gold \u2014 {item['description_short']}"
+        if gold < price:
+            desc = f"{base_desc} \u2014 locked (need {price - gold} more gold)"
+        else:
+            desc = base_desc
+        options.append({"label": item["label"], "description": desc, "value": item["id"]})
+    return options
 
 
 def _question_and_header(kind: str, cfg: dict) -> tuple[str, str]:
