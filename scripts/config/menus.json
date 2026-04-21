@@ -1,0 +1,66 @@
+{
+  "theme": {
+    "question": "Which theme?",
+    "header": "Theme",
+    "options": [
+      {"label": "Fantasy",    "description": "Swords, scrolls, dragons",       "value": "fantasy"},
+      {"label": "Sci-Fi",     "description": "Neon, circuits, starships",      "value": "scifi"},
+      {"label": "Retro",      "description": "8-bit arcade",                    "value": "retro"},
+      {"label": "Minimalist", "description": "Clean monochrome",                 "value": "minimalist"}
+    ]
+  },
+  "settings": {
+    "question": "Which setting do you want to change?",
+    "header": "Settings",
+    "options": [
+      {"label": "Environment",  "description": "CLI or Desktop",         "value": "settings-environment"},
+      {"label": "Theme",        "description": "Visual style",           "value": "settings-theme"},
+      {"label": "Display mode", "description": "Markdown or HTML",       "value": "settings-display-mode"}
+    ]
+  },
+  "settings-environment": {
+    "question": "Which environment?",
+    "header": "Environment",
+    "options": [
+      {"label": "CLI",     "description": "Terminal",                "value": "cli"},
+      {"label": "Desktop", "description": "Claude Desktop app",      "value": "desktop"}
+    ]
+  },
+  "settings-display-mode": {
+    "question": "Which display mode?",
+    "header": "Display mode",
+    "options": [
+      {"label": "Markdown", "description": "Render inline in the chat",       "value": "markdown"},
+      {"label": "HTML",     "description": "Open a rendered dashboard in browser", "value": "html"}
+    ]
+  },
+  "shop_items": [
+    {
+      "id": "code_mastery_plus_1",
+      "label": "Code Mastery +1",
+      "price": 50,
+      "type": "stat_boost",
+      "attribute": "code_mastery",
+      "one_time": false,
+      "description_short": "+1 permanent Code Mastery"
+    },
+    {
+      "id": "code_xp_boost",
+      "label": "Code XP Boost",
+      "price": 30,
+      "type": "buff",
+      "buff": {"id": "code_xp_boost", "name": "Code XP Boost", "effect": {"target": "code_xp", "multiplier": 1.5}, "actions_remaining": 10},
+      "one_time": false,
+      "description_short": "+50% code XP, 10 actions"
+    },
+    {
+      "id": "gold_rush",
+      "label": "Gold Rush",
+      "price": 25,
+      "type": "buff",
+      "buff": {"id": "gold_rush", "name": "Gold Rush", "effect": {"target": "all_gold", "multiplier": 1.25}, "actions_remaining": 15},
+      "one_time": false,
+      "description_short": "+25% gold, 15 actions"
+    }
+  ]
+}
