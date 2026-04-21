@@ -99,5 +99,34 @@ class TestThemeUpdate(unittest.TestCase):
                 update.apply(tmp, action="theme", value="scifi", token="abc123")
 
 
+class TestEnvironmentUpdate(unittest.TestCase):
+    def test_valid_environment_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            seed_pending(tmp, "environment", ["cli", "desktop"])
+            msg = update.apply(tmp, action="environment", value="desktop", token="abc123")
+            self.assertEqual(msg, "Environment set to Desktop.")
+            state = state_mod.load_state(tmp)
+            self.assertEqual(state["settings"]["environment"], "desktop")
+
+    def test_environment_token_cross_action_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            seed_pending(tmp, "theme", ["fantasy", "scifi"])
+            with self.assertRaises(update.TokenError):
+                update.apply(tmp, action="environment", value="desktop", token="abc123")
+
+
+class TestDisplayModeUpdate(unittest.TestCase):
+    def test_valid_display_mode_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            seed_state(tmp)
+            seed_pending(tmp, "display-mode", ["markdown", "html"])
+            msg = update.apply(tmp, action="display-mode", value="html", token="abc123")
+            self.assertEqual(msg, "Display mode set to HTML.")
+            state = state_mod.load_state(tmp)
+            self.assertEqual(state["settings"]["display_mode"], "html")
+
+
 if __name__ == "__main__":
     unittest.main()
