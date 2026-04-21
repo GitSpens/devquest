@@ -98,8 +98,39 @@ def apply(repo_path: str, action: str, value: str, token: str) -> str:
 
 
 def _apply_purchase(state: dict, item_id: str) -> str:
-    # Filled in in Task 9.
-    raise NotImplementedError("Shop purchase not yet implemented.")
+    import copy
+    cfg = devquest_state.load_menus_config()
+    item = next((i for i in cfg["shop_items"] if i["id"] == item_id), None)
+    if item is None:
+        raise MutationError(f"Unknown item: {item_id}.")
+
+    price = item["price"]
+    char = state.setdefault("character", {})
+    gold = char.get("gold", 0)
+    if gold < price:
+        raise MutationError(f"Not enough gold (need {price}, have {gold}).")
+
+    if item.get("one_time"):
+        owned = char.setdefault("purchased_one_time_items", [])
+        if item_id in owned:
+            raise MutationError("Item already owned.")
+        owned.append(item_id)
+
+    char["gold"] = gold - price
+    char["gold_spent"] = char.get("gold_spent", 0) + price
+    state.setdefault("stats", {})["items_purchased"] = state["stats"].get("items_purchased", 0) + 1
+
+    if item["type"] == "stat_boost":
+        attr = item["attribute"]
+        attrs = char.setdefault("attributes", {})
+        attrs[attr] = attrs.get(attr, 0) + 1
+    elif item["type"] == "buff":
+        buffs = char.setdefault("active_buffs", [])
+        buffs.append(copy.deepcopy(item["buff"]))
+    else:
+        raise MutationError(f"Unknown item type: {item['type']}")
+
+    return f"Purchased {item['label']}. -{price} gold ({char['gold']} remaining)."
 
 
 def main():

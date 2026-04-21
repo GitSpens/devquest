@@ -128,5 +128,65 @@ class TestDisplayModeUpdate(unittest.TestCase):
             self.assertEqual(state["settings"]["display_mode"], "html")
 
 
+class TestPurchase(unittest.TestCase):
+    def _seed_shop_state(self, tmp, gold=200):
+        state = {
+            "settings": {"environment": "cli", "theme": "fantasy", "display_mode": "markdown"},
+            "character": {
+                "gold": gold,
+                "gold_spent": 0,
+                "attributes": {"code_mastery": 0},
+                "active_buffs": [],
+                "purchased_one_time_items": [],
+            },
+            "stats": {"items_purchased": 0},
+        }
+        state_mod.save_state(tmp, state)
+
+    def test_stat_boost_purchase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._seed_shop_state(tmp, gold=100)
+            seed_pending(tmp, "buy", ["code_mastery_plus_1", "code_xp_boost", "gold_rush"])
+            msg = update.apply(tmp, action="buy", value="code_mastery_plus_1", token="abc123")
+            self.assertEqual(msg, "Purchased Code Mastery +1. -50 gold (50 remaining).")
+            state = state_mod.load_state(tmp)
+            self.assertEqual(state["character"]["gold"], 50)
+            self.assertEqual(state["character"]["gold_spent"], 50)
+            self.assertEqual(state["character"]["attributes"]["code_mastery"], 1)
+            self.assertEqual(state["stats"]["items_purchased"], 1)
+
+    def test_buff_purchase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._seed_shop_state(tmp, gold=100)
+            seed_pending(tmp, "buy", ["code_mastery_plus_1", "code_xp_boost", "gold_rush"])
+            msg = update.apply(tmp, action="buy", value="code_xp_boost", token="abc123")
+            self.assertEqual(msg, "Purchased Code XP Boost. -30 gold (70 remaining).")
+            state = state_mod.load_state(tmp)
+            self.assertEqual(len(state["character"]["active_buffs"]), 1)
+            self.assertEqual(state["character"]["active_buffs"][0]["id"], "code_xp_boost")
+            self.assertEqual(state["character"]["active_buffs"][0]["actions_remaining"], 10)
+
+    def test_insufficient_gold_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._seed_shop_state(tmp, gold=10)
+            seed_pending(tmp, "buy", ["code_mastery_plus_1", "code_xp_boost", "gold_rush"])
+            with self.assertRaises(update.MutationError) as ctx:
+                update.apply(tmp, action="buy", value="code_mastery_plus_1", token="abc123")
+            self.assertIn("Not enough gold", str(ctx.exception))
+            state = state_mod.load_state(tmp)
+            self.assertEqual(state["character"]["gold"], 10)
+            # Token should NOT be consumed on failure — user can retry the pick
+            pending_path = Path(tmp) / ".devquest" / "pending-action.json"
+            self.assertTrue(pending_path.exists())
+
+    def test_unknown_item_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._seed_shop_state(tmp, gold=100)
+            seed_pending(tmp, "buy", ["bogus"])
+            with self.assertRaises(update.MutationError) as ctx:
+                update.apply(tmp, action="buy", value="bogus", token="abc123")
+            self.assertIn("Unknown item", str(ctx.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
