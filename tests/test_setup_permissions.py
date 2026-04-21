@@ -32,6 +32,10 @@ class TestInstallPermissions(unittest.TestCase):
             for p in perms.DEVQUEST_PERMISSIONS:
                 self.assertIn(p, allow)
 
+    def test_includes_new_mutation_permissions(self):
+        self.assertIn("Bash(python *scripts/menu.py*)", perms.DEVQUEST_PERMISSIONS)
+        self.assertIn("Bash(python *scripts/update-state.py*)", perms.DEVQUEST_PERMISSIONS)
+
     def test_preserves_existing_permissions(self):
         with tempfile.TemporaryDirectory() as tmp:
             settings_dir = os.path.join(tmp, ".claude")
