@@ -37,10 +37,10 @@ If `last_tracked_commit` is null or empty, skip catch-up.
 | `/devquest-enable` | `references/themes.md` | Run Enable Flow (below) |
 | `/devquest-disable` | — | Set `enabled: false`, run `python <skill-path>/scripts/setup-project.py --repo <project-root> --uninstall`, write state, confirm: "DevQuest disabled. Your progress is saved." |
 | `/devquest-character` | `references/themes.md`, `references/progression.md` | Render character sheet in configured display mode |
-| `/devquest-shop` | `references/economy.md` | Show catalog with prices and gold balance, or process a numbered purchase |
+| `/devquest-shop` | `scripts/menu.py`, `scripts/update-state.py` | Run menu.py --for shop, AskUserQuestion, update-state.py --buy |
 | `/devquest-quests` | `references/quests.md` | Show quest list grouped by active/completed with progress bars |
-| `/devquest-theme` | `references/themes.md` | Present 4 numbered theme options, update `settings.theme`, confirm |
-| `/devquest-settings` | — | Show current settings table, offer numbered options to change environment, theme, or display mode |
+| `/devquest-theme` | `scripts/menu.py`, `scripts/update-state.py` | Run menu.py --for theme, AskUserQuestion, update-state.py --theme |
+| `/devquest-settings` | `scripts/menu.py`, `scripts/update-state.py` | Two-step: menu.py --for settings, then --for settings-<field>, update-state.py --<field> |
 
 ## Enable Flow
 
